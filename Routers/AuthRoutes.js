@@ -47,7 +47,7 @@ router.post("/enterUserDetails", async (req, res) => {
     password,
     firstName,
     lastName,
-    uesrname,
+    username,
     dob,
     mobNumber,
   } = req.body;
@@ -60,7 +60,7 @@ router.post("/enterUserDetails", async (req, res) => {
       {
         firstName,
         lastName,
-        uesrname,
+        username,
         dob,
         mobNumber,
       }

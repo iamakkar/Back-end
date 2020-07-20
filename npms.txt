@@ -1,0 +1,4 @@
+npm install nodemon
+npm install express
+npm install body-parser
+npm install mongoosenpm install mongodb --save

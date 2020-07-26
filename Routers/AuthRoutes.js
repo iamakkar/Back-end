@@ -8,13 +8,12 @@ const User = mongoose.model("User");
 
 //signup route
 router.post("/signup", async (req, res) => {
-  console.log("hi ther!");
   const {
     email,
     password,
     firstName,
     lastName,
-    uesrname,
+    username,
     dob,
     mobNumber,
   } = req.body;
@@ -26,12 +25,11 @@ router.post("/signup", async (req, res) => {
       firstName,
       lastName,
       dob,
-      uesrname,
+      username,
       mobNumber,
     });
     await user.save();
     const token = jwt.sign({ userId: user._id }, jwtkey);
-    console.log(token);
     res.send({ token });
   } catch (err) {
     console.error(err);
@@ -66,7 +64,7 @@ router.post("/enterUserDetails", async (req, res) => {
       }
     );
     if (!user) {
-      console.log("FAIL HO GHAYA YAAR!");
+      console.log("User Not Found");
     }
     res.send(200);
   } catch (err) {
@@ -83,25 +81,45 @@ router.post("/signin", async (req, res) => {
       .status(422)
       .send({ error: "You must provide your email or password!" });
   }
-  //console.log("part1done");
+
   const user = await User.findOne({ email });
   if (!user) {
     return res
       .status(422)
       .send({ error: "You must provide your email or password!" });
   }
-  // console.log("part2done");
+
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, jwtkey);
     res.send({ token });
-    //console.log("tokensent");
   } catch (err) {
     return res
       .status(422)
       .send({ error: "You must provide your email or password!" });
   }
-  //console.log("part4done");
+});
+
+//display route
+router.post("/display", async (req, res) => {
+  const { email } = req.body;
+  console.log("Hi");
+  console.log(req.body);
+
+  try {
+    const user = await User.findOne({ email: email });
+    console.log("USer Found");
+    console.log(user.username);
+    res.status(200).send({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      coins: user.coins,
+      streak: user.streak,
+    });
+  } catch (err) {
+    return res.status(404).send(err);
+  }
 });
 
 //exporting the router

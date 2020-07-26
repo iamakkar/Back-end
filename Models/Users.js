@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-//const Schema = mongoose.Schema;
-const coinsCount = 100;
-const streakCount = 0;
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -35,10 +32,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  coins: {
+    type: Number,
+    default: 100,
+  },
+  streak: {
+    type: Number,
+    default: 0,
+  },
 });
 
 //Hashing password
-
 userSchema.pre("save", function (next) {
   const user = this;
   if (!user.isModified("password")) {

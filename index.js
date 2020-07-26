@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const port = 3000;
 const bodyParser = require("body-parser");
-const { mongoURL } = require("./keys");
+
+require("dotenv").config();
 
 //importing models
 require("./Models/Users");
@@ -20,7 +20,7 @@ const AuthRoutes = require("./Routers/AuthRoutes");
 //Using Routes
 app.use(AuthRoutes);
 
-mongoose.connect(mongoURL, {
+mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -37,6 +37,6 @@ app.get("/", requireToken, (req, res) => {
   res.send("Your email is" + req.user.email);
 });
 
-app.listen(port, () => {
-  console.log("server running on port " + port);
+app.listen(process.env.PORT, () => {
+  console.log("server running on port " + process.env.PORT);
 });

@@ -6,19 +6,21 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 
 //importing models
-require("./Models/Users");
+require("./Server/Models/Users");
 
 //Using Body-parser
 app.use(bodyParser.json());
 
 //importing jwt token
-const requireToken = require("./middleware/requireToken");
+const requireToken = require("./Server/middleware/requireToken");
 
 //importing Routes
-const AuthRoutes = require("./Routers/AuthRoutes");
+const AuthRoutes = require("./Server/Routers/AuthRoutes");
+const ImageRoutes = require("./Server/Routers/imageUploadRoutes");
 
 //Using Routes
 app.use(AuthRoutes);
+app.use(ImageRoutes);
 
 mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,

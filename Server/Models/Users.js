@@ -44,6 +44,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  socketid: {
+    type: String,
+    required: false,
+    default: "",
+  },
 });
 
 //Hashing password

@@ -17,9 +17,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
     "mongoose": "^5.9.24",
+    "mongoose-simple-random": "^0.4.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0",
     "uuid": "^8.3.0"
   }
 }

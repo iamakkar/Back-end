@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const random = require("mongoose-simple-random");
 
 const questionSchema = new mongoose.Schema({
   topic: {
@@ -25,8 +26,21 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  option4: {
+    type: String,
+    required: true,
+  },
   correctOption: {
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+    default: "",
+    required: false,
+  },
 });
+
+const Test = mongoose.model("Questions", questionSchema);
+
+module.exports = Test;

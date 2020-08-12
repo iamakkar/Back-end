@@ -117,9 +117,26 @@ router.post("/display", async (req, res) => {
       dob: user.dob,
       mobNumber: user.mobNumber,
       profilePicture: user.profilePicture,
+      socketid: user.socketid,
     });
   } catch (err) {
     return res.status(404).send(err);
+  }
+});
+
+//invite oponent route
+router.post("/finduser", async (req, res) => {
+  const { firstName } = req.body;
+
+  try {
+    const users = await User.find({ firstName: firstName });
+    if (!users) {
+      res.status(404).send("User Doesn't Exist!");
+    }
+    res.status(200).send(users);
+    console.log(users);
+  } catch (err) {
+    console.log(err);
   }
 });
 

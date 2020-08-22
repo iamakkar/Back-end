@@ -36,8 +36,6 @@ app.use(Report);
 
 //using socket
 var bid = 0;
-var score1 = 0;
-var score2 = 0;
 
 io.on("connection", (socket) => {
   console.log("socket's on maan");
@@ -79,14 +77,40 @@ io.on("connection", (socket) => {
       subtopic: data.subtopic,
     })
       .limit(5)
-      .skip(num)
+      //.skip(num)
       .exec((err, cb) => {
         if (err) {
           console.log(err);
         }
         console.log(cb);
-        //io.to(data.socketid).to(data.mysocketid).emit("accepted", cb);
+        io.to(data.socketid).to(data.mysocketid).emit("accepted", cb);
       });
+  });
+
+  socket.on("sendmyscore", async (data) => {
+    io.to(data.socketid).emit("sendmyscore", data.score);
+    console.log("sent score to" + data.socketid + "  " + data.score);
+  });
+
+  socket.on("winner", async (data) => {
+    console.log("winner");
+    const user = await User.findOne({ email: data });
+    let x = user.coins + bid;
+    let y = user.streak + 1;
+    const user1 = await User.findOneAndUpdate(
+      { email: data },
+      { coins: x, streak: y }
+    );
+  });
+
+  socket.on("notwinner", async (data) => {
+    console.log("not-winner");
+    const user = await User.findOne({ email: data });
+    let x = user.coins - bid;
+    const user1 = await User.findOneAndUpdate(
+      { email: data },
+      { coins: x, streak: 0 }
+    );
   });
 
   socket.on("disconnect", async (data) => {

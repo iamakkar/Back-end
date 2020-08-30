@@ -36,6 +36,7 @@ app.use(Report);
 
 //using socket
 var bid = 0;
+var ques = [];
 
 io.on("connection", (socket) => {
   console.log("socket's on maan");
@@ -66,25 +67,69 @@ io.on("connection", (socket) => {
   });
 
   socket.on("rejected", (data) => {
-    //console.log(data);
+    console.log("rejected");
     io.to(data.socketid).emit("rejected", data.message);
   });
 
   socket.on("accepted", async (data) => {
-    const num = Math.floor(Math.random() * 5) + 1;
-    const questions = await Questions.find({
-      topic: data.topic,
-      subtopic: data.subtopic,
-    })
-      .limit(5)
-      //.skip(num)
-      .exec((err, cb) => {
-        if (err) {
-          console.log(err);
-        }
-        console.log(cb);
-        io.to(data.socketid).to(data.mysocketid).emit("accepted", cb);
+    console.log("Call to ja rhi hai dekh");
+    if (data.subtopic == "Random") {
+      Questions.countDocuments({ topic: data.topic }).exec((err, cnt) => {
+        [1, 2, 3, 4, 5, 6].forEach(async function get() {
+          const num = Math.floor(Math.random() * cnt) + 1;
+          const questions = await Questions.find({
+            topic: data.topic,
+          })
+            .skip(num)
+            .limit(1)
+            .exec(async (err, cb) => {
+              if (err) {
+                console.log(err);
+              }
+              if (ques.length == 5) {
+                await io
+                  .to(data.socketid)
+                  .to(data.mysocketid)
+                  .emit("accepted", ques);
+                ques = [];
+              } else {
+                let temp = cb[0];
+                ques.push(temp);
+              }
+            });
+        });
       });
+    } else {
+      Questions.countDocuments({
+        topic: data.topic,
+        subtopic: data.subtopic,
+      }).exec((err, cnt) => {
+        [1, 2, 3, 4, 5, 6].forEach(async function get() {
+          const num = Math.floor(Math.random() * cnt) + 1;
+          const questions = await Questions.find({
+            topic: data.topic,
+            subtopic: data.subtopic,
+          })
+            .skip(num)
+            .limit(1)
+            .exec(async (err, cb) => {
+              if (err) {
+                console.log(err);
+              }
+              if (ques.length == 5) {
+                await io
+                  .to(data.socketid)
+                  .to(data.mysocketid)
+                  .emit("accepted", ques);
+                ques = [];
+              } else {
+                let temp = cb[0];
+                ques.push(temp);
+              }
+            });
+        });
+      });
+    }
   });
 
   socket.on("sendmyscore", async (data) => {

@@ -67,7 +67,7 @@ router.post("/enterUserDetails", async (req, res) => {
       res.status(404).send("User not found");
       console.log("User Not Found");
     }
-    res.send(200);
+    res.status(200);
   } catch (err) {
     console.error(err);
     return res.status(422).send(err.message);

@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { jwtkey } = require("../../keys");
+const { findOneAndDelete, findOneAndUpdate } = require("../Models/Questions");
+const { response } = require("express");
 
 const router = express.Router();
 const User = mongoose.model("User");
@@ -134,8 +136,28 @@ router.post("/finduser", async (req, res) => {
       res.status(404).send("User Doesn't Exist!");
     }
     res.status(200).send(users);
-    console.log(users);
   } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/exitapp", async (req, res) => {
+  const { email } = req.body;
+  console.log("callllllll aaayi");
+  console.log(email);
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      {
+        socketid: "",
+      }
+    );
+    if (!user) {
+      res.status(404).send("User not found");
+    }
+    res.status(200).send();
+  } catch (err) {
+    res.status(502).send(err);
     console.log(err);
   }
 });

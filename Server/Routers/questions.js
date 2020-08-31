@@ -9,36 +9,30 @@ var count = 0;
 
 router.post("/getquestions", (req, res) => {
   var { topic, subtopic } = req.body;
-  Questions.countDocuments({ topic: topic, subtopic: subtopic }).exec(
-    (err, cnt) => {
-      console.log("THIs is Count: " + cnt);
-
-      [1, 2, 3, 4, 5, 6].forEach(async function cb() {
+  if (subtopic == "Random") {
+    Questions.countDocuments({ topic: topic }).exec((err, cnt) => {
+      [1, 2, 3, 4, 5, 6].forEach(async function get() {
         const num = Math.floor(Math.random() * cnt) + 1;
-        console.log(num);
-
-        const mat = await Questions.find({
+        const questions = await Questions.find({
           topic: topic,
-          subtopic: subtopic,
         })
           .skip(num)
           .limit(1)
-          .exec((err, cb) => {
+          .exec(async (err, cb) => {
             if (err) {
               console.log(err);
             }
-            console.log(cb);
-            console.log(ques);
             if (ques.length == 5) {
-              res.status(200).send(ques);
+              await res.status(200).send(ques);
+              ques = [];
             } else {
               let temp = cb[0];
               ques.push(temp);
             }
           });
       });
-    }
-  );
+    });
+  }
 });
 
 //exporting the router

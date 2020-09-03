@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   },
   coins: {
     type: Number,
-    default: 100,
+    default: 50000,
   },
   streak: {
     type: Number,

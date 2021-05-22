@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { jwtkey } = require("../../keys");
 const { findOneAndDelete, findOneAndUpdate } = require("../Models/Questions");
-const { response } = require("express");
 
 const router = express.Router();
 const User = mongoose.model("User");
